@@ -4,22 +4,35 @@ namespace Sui\Resources;
 
 class SuiObjectOwner
 {
-  public string $type;
-  public string | int $value;
+  protected string $type;
+  protected string | int $value;
 
   public function __construct(mixed $data)
   {
     if ($data == 'Immutable') {
       $this->type = $data;
-    } else if (array_key_exists('AddressOwner', $data)) {
-      $this->type = 'AddressOwner';
-      $this->value = $data['AddressOwner'];
-    } else if (array_key_exists('ObjectOwner', $data)) {
-      $this->type = 'ObjectOwner';
-      $this->value = $data['ObjectOwner'];
     } else {
-      $this->type = 'Shared';
-      $this->value = $data['Shared']['initial_shared_version'];
+      $ownerType = array_key_first($data);
+      $this->type = $ownerType;
+
+      if ($ownerType == 'AddressOwner' || $ownerType == 'ObjectOwner') {
+        $this->value = $data[$ownerType];
+      } else {
+        $this->value = (int) $data[$ownerType]['initial_shared_version'];
+      }
     }
+  }
+
+  public function toArray(): string | array
+  {
+    if ($this->type == 'Immutable') {
+      return $this->type;
+    }
+
+    if ($this->type == 'AddressOwner' || $this->type == 'ObjectOwner') {
+      return [$this->type => $this->value];
+    }
+
+    return [$this->type => ['initial_shared_version' => $this->value]];
   }
 }
