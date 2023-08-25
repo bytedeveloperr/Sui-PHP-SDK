@@ -1,0 +1,23 @@
+{
+  "name": "bytedeveloper/sui",
+  "description": "A Sui SDK for PHP developers",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Sui\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "bytedeveloperr",
+      "email": "abdulrahmanyusuf125@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^7.7"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.3"
+  }
+}
